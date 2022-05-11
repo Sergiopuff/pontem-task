@@ -6,16 +6,31 @@ import { Button, Stack } from "@mui/material";
 import { GradientText } from "../../styled/gradientText";
 import { useDispatch, useSelector } from "react-redux";
 import { removeSelected, setSelected } from "../../../redux/slices/blocks";
+import { ReactComponent as OneBlockImage } from "../icons/1.svg";
+import { ReactComponent as TwoBlockImage } from "../icons/2.svg";
+import { ReactComponent as ThreeBlockImage } from "../icons/3.svg";
+import { ReactComponent as FourBlockImage } from "../icons/4.svg";
 
-function Block({ block, icon }) {
+const imageMapper = {
+  0: <OneBlockImage />,
+  1: <OneBlockImage />,
+  2: <TwoBlockImage />,
+  3: <ThreeBlockImage />,
+};
+
+function Block({ block }) {
   const dispatch = useDispatch();
   const selected = useSelector((state) => state.blocks.collections.selected);
   const searchParam = useSelector((state) => state.blocks.params.search);
 
+  const icon = block && (imageMapper[block.blocksCount] || <FourBlockImage />);
+
   const isSelected = useMemo(
     () => selected.findIndex((item) => item.id === block.id),
-    [block.id, selected]
+    [block?.id, selected]
   );
+
+  if (!block) return false;
 
   return (
     <StyledBlock>

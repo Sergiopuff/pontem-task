@@ -1,6 +1,6 @@
 import Stack from "@mui/material/Stack";
 import { Chip } from "@mui/material";
-import { changeParams } from "../../../redux/slices/blocks";
+import { renderData } from "../../../redux/slices/blocks";
 import { useDispatch, useSelector } from "react-redux";
 
 const selectedStr = "selected";
@@ -16,7 +16,7 @@ function Filters() {
         <Chip
           key={filter}
           onClick={() => {
-            activeFilter !== filter && dispatch(changeParams({ filter }));
+            activeFilter !== filter && dispatch(renderData({ filter }));
           }}
           color={activeFilter === filter ? "success" : "secondary"}
           disabled={

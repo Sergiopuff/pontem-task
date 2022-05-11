@@ -23,7 +23,6 @@ export const blocksSlice = createSlice({
   initialState,
   reducers: {
     changeParams: (state, action) => {
-      console.log(action.payload);
       // const filter = action.payload.filter || state.params.filter;
       Object.keys(action.payload).forEach((param) => {
         state.params[param] = action.payload[param];
@@ -32,26 +31,21 @@ export const blocksSlice = createSlice({
     applyParams: (state) => {
       const { filter, per, page, search } = state.params;
 
-      // const start = page === 0 ? 0 : page * per - per;
-      // const end = page === 0 ? per : page * per;
-      // const arr = state.collection.slice(start, end);
-      // state.shownCollection = arr;
-
-      state.shownCollection = state.collections[filter].filter(
-        (block) =>
-          block.title.toLowerCase().includes(search) ||
-          block.description.toLowerCase().includes(search)
-      );
+      state.shownCollection = state.collection.length
+        ? state.collections[filter].filter(
+            (block) =>
+              block.title.toLowerCase().includes(search) ||
+              block.description.toLowerCase().includes(search)
+          )
+        : [];
     },
     blocksRequested: (state) => {
       state.isLoading = true;
     },
     blocksSucceeded: (state, action) => {
       const { blocks } = action.payload;
-      const blocksCount = state.params.per * (state.params.page || 1);
       state.collection = blocks;
-      state.shownCollection = blocks.slice(0, blocksCount);
-      state.collections.all = blocks.slice(0, blocksCount);
+      state.shownCollection = blocks;
       state.isLoading = false;
       state.error = null;
     },

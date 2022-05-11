@@ -10,7 +10,7 @@ function Search() {
   const { query } = useParams();
 
   useEffect(() => {
-    dispatch(renderData({ search: query || "" }));
+    // dispatch(renderData({ search: query || "" }));
   }, [dispatch, query]);
 
   return (

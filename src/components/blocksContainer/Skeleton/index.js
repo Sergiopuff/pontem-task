@@ -1,9 +1,9 @@
-import { Skeleton } from "@mui/material";
+import { Skeleton, Stack } from "@mui/material";
 
 function BlockSkeleton() {
   return (
-    <>
-      {[...Array(10).keys()].map((key) => (
+    <Stack alignItems="center" spacing={2} mt={4}>
+      {[...Array(6).keys()].map((key) => (
         <Skeleton
           key={key}
           variant="rectangular"
@@ -12,7 +12,7 @@ function BlockSkeleton() {
           height={166}
         />
       ))}
-    </>
+    </Stack>
   );
 }
 
