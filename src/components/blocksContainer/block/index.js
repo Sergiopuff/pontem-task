@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import PropTypes from "prop-types";
 import Highlighter from "react-highlight-words";
 import StyledBlock from "../../styled/styledBlock";
 import Typography from "@mui/material/Typography";
@@ -20,14 +21,14 @@ const imageMapper = {
 
 function Block({ block }) {
   const dispatch = useDispatch();
-  const selected = useSelector((state) => state.blocks.collections.selected);
+  const selected = useSelector((state) => state.blocks.selected);
   const searchParam = useSelector((state) => state.blocks.params.search);
 
   const icon = block && (imageMapper[block.blocksCount] || <FourBlockImage />);
 
   const isSelected = useMemo(
     () => selected.findIndex((item) => item.id === block.id),
-    [block?.id, selected]
+    [block.id, selected]
   );
 
   if (!block) return false;
@@ -92,5 +93,18 @@ function Block({ block }) {
     </StyledBlock>
   );
 }
+
+Block.propTypes = {
+  block: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    blocksCount: PropTypes.number.isRequired,
+  }),
+};
+
+Block.defaultProps = {
+  block: {},
+};
 
 export default Block;

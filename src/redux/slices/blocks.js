@@ -3,15 +3,11 @@ import { QUERY } from "../../utils/constants";
 
 const initialState = {
   collection: [],
-  collections: {
-    all: [],
-    selected: [],
-  },
+  selected: [],
   shownCollection: [],
+  filters: ["all", "selected"],
   params: {
     search: "",
-    per: 10,
-    page: 0,
     filter: "all",
   },
   isLoading: false,
@@ -23,21 +19,21 @@ export const blocksSlice = createSlice({
   initialState,
   reducers: {
     changeParams: (state, action) => {
-      // const filter = action.payload.filter || state.params.filter;
       Object.keys(action.payload).forEach((param) => {
         state.params[param] = action.payload[param];
       });
     },
     applyParams: (state) => {
-      const { filter, per, page, search } = state.params;
+      const { search, filter } = state.params;
 
-      state.shownCollection = state.collection.length
-        ? state.collections[filter].filter(
-            (block) =>
-              block.title.toLowerCase().includes(search) ||
-              block.description.toLowerCase().includes(search)
-          )
-        : [];
+      const filteredCollection =
+        filter === "all" ? [...state.collection] : [...state.selected];
+
+      state.shownCollection = filteredCollection.filter(
+        (block) =>
+          block.title.toLowerCase().includes(search) ||
+          block.description.toLowerCase().includes(search)
+      );
     },
     blocksRequested: (state) => {
       state.isLoading = true;
@@ -55,13 +51,11 @@ export const blocksSlice = createSlice({
     },
     setSelected: (state, action) => {
       const { block } = action.payload;
-      state.collections.selected = state.collections.selected.concat(block);
+      state.selected = state.selected.concat(block);
     },
     removeSelected: (state, action) => {
       const { id } = action.payload;
-      state.collections.selected = state.collections.selected.filter(
-        (block) => block.id !== id
-      );
+      state.selected = state.selected.filter((block) => block.id !== id);
     },
   },
 });
@@ -78,7 +72,7 @@ export const {
 
 export default blocksSlice.reducer;
 
-// Thunk function
+// Thunk functions
 export const fetchBlocks = () => async (dispatch) => {
   dispatch(blocksRequested());
   await fetch(QUERY)
@@ -94,6 +88,6 @@ export const renderData = (params) => async (dispatch) => {
   await new Promise(() =>
     setTimeout(() => {
       dispatch(applyParams());
-    }, 100)
+    }, 300)
   );
 };
